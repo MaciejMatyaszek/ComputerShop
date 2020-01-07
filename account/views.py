@@ -7,18 +7,27 @@ from django.contrib.auth.models import User, auth
 def login(request):
 
 
+
     if request.method == 'POST':
         username= request.POST['username']
         password= request.POST['password']
 
         user = auth.authenticate(username=username, password=password)
+        print(request.get_full_path())
+        print(request.GET.get('url'))
+        print(request.GET.get('url') is not None)
 
         if user is not None:
-            auth.login(request,user)
-            return redirect("/")
+         auth.login(request,user)
+         return redirect("/")
+
+
         else:
             messages.info(request, 'invalid credentials')
             return render(request, 'login.html')
+
+
+
     else:
 
         return render(request, 'login.html')

@@ -68,6 +68,7 @@ class OrderProduct(models.Model):
     ordered = models.BooleanField(default=False)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
+    objects = models.Manager()
     def __str__(self):
         return f"{self.quantity} of {self.product.name}"
 
@@ -81,6 +82,9 @@ class Order(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    def get_products_name(self):
+        pass
 
 
 
