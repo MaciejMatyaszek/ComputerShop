@@ -12,6 +12,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
+    <script type="text/javascript">
+        function teraz(ala){
+
+     console.log(ala)
+     document.getElementById(ala).submit()
+        }
+</script>
+
+
+
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
@@ -114,9 +124,10 @@
 												</ul>
 											</div>
 										</div>
-										<button type="submit" class="header_search_button trans_300" value="Submit"><img src="images/search.png" alt=""></button>
+										<button  class="header_search_button trans_300" ><img src="images/search.png" alt=""></button>
 									</form>
 								</div>
+
 							</div>
 						</div>
 					</div>
@@ -375,20 +386,23 @@
 									<div class="cart_item_info d-flex flex-md-row flex-column justify-content-between">
 										<div class="cart_item_name cart_info_col">
 											<div class="cart_item_title">Name</div>
-											<div class="cart_item_text">{{ e.product }}</div>
+											<div class="cart_item_text" style="min-width: 100px;">{{ e.product }}</div>
 										</div>
+
+    
+    
 
 										<div class="cart_item_quantity cart_info_col">
 											<div class="cart_item_title">Quantity</div>
-											<div class="cart_item_text">{{ e.quantity }}</div>
+                                            <div class="cart_item_text" ><form method="post" id="jsform{{ e.id }}"  action="updateQuantity"> {% csrf_token %}<input type="hidden"  name="productid"   value="{{ e.id }}"><input  type="number" min="1" max="5" style="width: 3em;"  onchange="teraz('jsform{{ e.id }}')" name="quantity" value="{{ e.quantity }}"></form></div>
 										</div>
 										<div class="cart_item_price cart_info_col">
 											<div class="cart_item_title">Price</div>
-											<div class="cart_item_text">{{ e.product.price }}</div>
+											<div class="cart_item_text" style="min-width: 60px;">{{ e.product.price }}</div>
 										</div>
 										<div class="cart_item_total cart_info_col">
 											<div class="cart_item_title">Total</div>
-											<div class="cart_item_text">{{ e.product.price |multiply:e.quantity }}</div>
+											<div class="cart_item_text" style="min-width: 60px;">{{ e.product.price |multiply:e.quantity }}</div>
 										</div>
 									</div>
 								</li>
