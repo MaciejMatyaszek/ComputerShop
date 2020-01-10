@@ -1,8 +1,9 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView, ListView
 from django.utils import timezone
-from .models import Product, OrderProduct, Order
+from .models import Product, OrderProduct, Order, OrderAdress
 from account.models import  UserAddress, User
 from django import  template
 import pickle
@@ -55,8 +56,8 @@ def OrderView(request):
 
     else:
 
-        order = Order.objects.filter(user=request.user)
-        order_products = OrderProduct.objects.filter(user=request.user)
+        order = Order.objects.filter(user=request.user, ordered=False)
+        order_products = OrderProduct.objects.filter(user=request.user, ordered=False)
         total = 0
         for se in order_products:
              print(se.product.name)
@@ -100,10 +101,10 @@ def add_to_cart(request, slug):
             order.products.add(order_product)
 
         user=request.user
-        order=get_object_or_404(Order, user=user)
+        order=get_object_or_404(Order, user=user, ordered=False)
 
         order_products=OrderProduct.objects.all()
-        order_products=order_products.filter(user=user)
+        order_products=order_products.filter(user=user, ordered=False)
 
         total=0
         for se in order_products:
@@ -143,16 +144,47 @@ def cartupdateQuantity(request):
         print(quant)
         order_product = OrderProduct.objects.filter(id=id)
         order_product.update(quantity=quant)
+
         return redirect('cart')
 
-
+@login_required(login_url='account/login')
 def buy(request):
     print(request.user)
     user = User.objects.get(username=request.user)
     useradress=UserAddress.objects.get(user=request.user)
-    order_products = OrderProduct.objects.filter(user=request.user)
+    order_products = OrderProduct.objects.filter(user=request.user, ordered=False)
+    total = 0
+    for se in order_products:
+        print(se.product.name)
+        total += se.quantity * se.product.price
+
+    return render(request, 'buy.html', {'adres':useradress, 'user':user, 'products':order_products, 'total':total})
+
+
+def purchase(request):
+    if request.method=='POST':
+        print("Siemanko")
+        firstname=request.POST['firstname']
+        lastname=request.POST['lastname']
+        city = request.POST['city']
+        street = request.POST['street']
+        address = request.POST['address']
+        zipcode = request.POST['zipcode']
+        phone = request.POST['phone']
+        print(phone)
 
 
 
 
-    return render(request, 'buy.html', {'adres':useradress, 'user':user, 'products':order_products})
+
+
+
+        orderaddress = OrderAdress.objects.create(order=Order.objects.get(user=request.user, ordered=False), firstname=firstname, lastname=lastname, city=city, street=street, address=address, zipcode=zipcode, phone=phone, )
+        order = Order.objects.filter(user=request.user, ordered=False).update(ordered=True)
+        order_products = OrderProduct.objects.filter(user=request.user, ordered=False).update(ordered=True)
+        OrderAdress.objects.create()
+
+
+        return redirect('/')
+    else:
+        return redirect('/')

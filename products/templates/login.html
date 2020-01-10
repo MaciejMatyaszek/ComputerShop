@@ -365,8 +365,8 @@
       Username  <input type="text" name="username" placeholder="username"><br><br>
     Password <input type="password" name="password" placeholder="password"><br><br>
 
-    {% if request.GET.url %}
-    <input type="hidden" name="url" value="{{ request.GET.url }}">
+    {% if request.GET.next %}
+    <input type="hidden" name="next" value="{{ request.GET.next }}">
     {% endif %}
     <input type="submit" value="Login">
         </form>

@@ -375,7 +375,8 @@
     <!-- Cart Total Page Begin -->
     <section class="cart-total-page spad">
         <div class="container">
-            <form action="#" class="checkout-form">
+            <form action="purchase" class="checkout-form" method="post">
+                {% csrf_token %}
                 <div class="row">
                     <div class="col-lg-12">
                         <h3>Your Information</h3>
@@ -386,10 +387,10 @@
                                 <p class="in-name">Name*</p>
                             </div>
                             <div class="col-lg-5">
-                                <input type="text" placeholder="First Name">
+                                <input type="text" placeholder="First Name" name="firstname" value="{{ user.first_name }}">
                             </div>
                             <div class="col-lg-5">
-                                <input type="text" placeholder="Last Name">
+                                <input type="text" placeholder="Last Name"  name="lastname" value="{{ user.last_name }}">
                             </div>
                         </div>
                         <div class="row">
@@ -397,8 +398,8 @@
                                 <p class="in-name">Street Address*</p>
                             </div>
                             <div class="col-lg-10">
-                                <input type="text">
-                                <input type="text">
+                                <input type="text"  name="street" value="{{ adres.street }}">
+                                <input type="text" name="address"  value="{{ adres.address }}">
                             </div>
                         </div>
                         <div class="row">
@@ -416,23 +417,16 @@
                                 <p class="in-name">City*</p>
                             </div>
                             <div class="col-lg-10">
-                                <input type="text">
+                                <input type="text" name="city" value="{{ adres.city }}">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-2">
-                                <p class="in-name">Country</p>
-                            </div>
-                            <div class="col-lg-10">
-                                <input type="text">
-                            </div>
-                        </div>
+
                         <div class="row">
                             <div class="col-lg-2">
                                 <p class="in-name">Post Code/ZIP*</p>
                             </div>
                             <div class="col-lg-10">
-                                <input type="text">
+                                <input type="text" name="zipcode" value="{{ adres.zipcode }}">
                             </div>
                         </div>
                         <div class="row">
@@ -440,7 +434,7 @@
                                 <p class="in-name">Phone*</p>
                             </div>
                             <div class="col-lg-10">
-                                <input type="text">
+                                <input type="text" name='phone' value="{{ adres.phone }}">
                             </div>
                         </div>
                         <div class="row">
@@ -454,26 +448,27 @@
                     </div>
                     <div class="col-lg-3">
                         <div class="order-table">
+                              {% for p in products %}
                             <div class="cart-item">
                                 <span>Product</span>
-                                <p class="product-name">Blue Dotted Shirt</p>
+
+                                <p class="product-name">{{ p.product.name }}</p>
+
                             </div>
                             <div class="cart-item">
                                 <span>Price</span>
-                                <p>$29</p>
+                                <p>{{ p.product.price }}</p>
                             </div>
                             <div class="cart-item">
                                 <span>Quantity</span>
-                                <p>1</p>
-                            </div>
-                            <div class="cart-item">
-                                <span>Shipping</span>
-                                <p>$10</p>
+                                <p>{{ p.quantity }}</p>
                             </div>
 
+                            {% endfor %}
                             <div class="cart-total">
                                 <span>Total</span>
-                                <p>$39</p>
+
+                                <p>{{total}}</p>
                             </div>
                         </div>
                     </div>

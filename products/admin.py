@@ -30,9 +30,24 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = [
 
     ]
+class OrderAdressAdmin(admin.ModelAdmin):
+    list_display =  [ 'firstname',
+                    'lastname',
+                    'city',
+                    'street',
+                    'address',
+                    'zipcode',
+                    'phone',
+
+
+                    ]
+
+    list_filter = ['firstname', 'lastname', 'city']
+
 
 admin.site.register(Product, ProductsAdmin)
 admin.site.register(OrderProduct)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Customer,CustomerAdmin)
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(OrderAdress)

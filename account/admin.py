@@ -7,7 +7,7 @@ from django.contrib import admin
 from .models import *
 
 class UserAdressAdmin(admin.ModelAdmin):
-    list_display = ('user', 'city', 'zipcode', 'street', 'address' )
+    list_display = ('user', 'city', 'zipcode', 'street', 'address', 'phone' )
     prepopulated_fields = {'slug': ('user', 'city')}
 
 

@@ -7,7 +7,7 @@ from .models import UserAddress
 # Create your views here.
 
 def login(request):
-    url = request.POST.get('url', '/')
+    url = request.POST.get('next', '/')
     print("JAka wartos: "+url)
     if request.method == 'POST':
         username= request.POST['username']
@@ -18,7 +18,7 @@ def login(request):
 
         if user is not None:
          auth.login(request,user)
-
+         print(HttpResponseRedirect(url))
          return HttpResponseRedirect(url)
 
 
@@ -29,8 +29,9 @@ def login(request):
 
 
     else:
-
-        return render(request, 'login.html')
+        url=request.GET.get('next', '/')
+        print(url)
+        return render(request, 'login.html', {'next': url} )
 
 
 def register(request):
@@ -46,8 +47,9 @@ def register(request):
         city = request.POST['city']
         zipcode = request.POST['zipcode']
         address = request.POST['address']
+        phone = request.POST['phone']
 
-        if username == '' or password1 == '' or last_name == '' or username == '' or password2== '' or email == '' or street == '' or city == '' or zipcode=='' or address == '':
+        if username == '' or password1 == '' or last_name == '' or username == '' or password2== '' or email == '' or street == '' or city == '' or zipcode=='' or address == '' or phone == '':
             print('Bylem tutaj')
             messages.info(request, 'Uzupełnij wszystkie pola!')
             return redirect('register')

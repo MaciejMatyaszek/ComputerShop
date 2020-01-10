@@ -81,10 +81,25 @@ class Order(models.Model):
     ordered = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.user.username
+        return  str(self.id)+' '+ self.user.username +" "+str(self.ordered_date)
 
-    def get_products_name(self):
-        pass
+
+
+
+class OrderAdress(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True)
+    firstname = models.CharField(max_length=40)
+    lastname = models.CharField(max_length=40)
+    city = models.CharField(max_length=40)
+    street = models.CharField(max_length=40)
+    address = models.CharField(max_length=40)
+    zipcode = models.CharField(max_length=40)
+    phone = models.IntegerField(default=1)
+    objects = models.Manager()
+    def __str__(self):
+        return self.firstname + self.lastname
+
+
 
 class OrderHistory(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
