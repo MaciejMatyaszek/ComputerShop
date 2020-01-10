@@ -64,8 +64,13 @@
 							</div>
 							<div class="top_bar_user">
 								<div class="user_icon"><img src="images/user.svg" alt=""></div>
-								<div><a href="/account/register">Register</a></div>
-								<div><a href="#">Sign in</a></div>
+                                {% if user.is_authenticated %}
+                                    <div>{{ user.username }}</div>
+                                    <div><a href="account/logout">Logout</a></div>
+                                {% else %}
+								<div><a href="account/register">Register</a></div>
+								<div><a href="account/login">Sign in</a></div>
+                                {% endif %}
 							</div>
 						</div>
 					</div>
@@ -355,11 +360,15 @@
         <form action="login" method="post">
 <center>
         {% csrf_token %}
-    {{ url  }}
-        <input type="text" name="username" placeholder="username"><br><br>
-    <input type="password" name="password" placeholder="password"><br><br>
 
-    <input type="submit">
+
+      Username  <input type="text" name="username" placeholder="username"><br><br>
+    Password <input type="password" name="password" placeholder="password"><br><br>
+
+    {% if request.GET.url %}
+    <input type="hidden" name="url" value="{{ request.GET.url }}">
+    {% endif %}
+    <input type="submit" value="Login">
         </form>
     <div>
         {% for message in messages %}

@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView, ListView
 from django.utils import timezone
 from .models import Product, OrderProduct, Order
+from account.models import  UserAddress, User
 from django import  template
 import pickle
 # Create your views here.
@@ -41,6 +42,27 @@ class HomeView(ListView):
     model = Product
     paginate_by = 10
     template_name = "index.html"
+
+def OrderView(request):
+    if request.method == 'POST':
+        id = request.POST.get('productid')
+        print(id)
+        quant = request.POST.get('quantity')
+        print(quant)
+        order_product = OrderProduct.objects.filter(id=id)
+        order_product.update(quantity=quant)
+        return redirect('/cart')
+
+    else:
+
+        order = Order.objects.filter(user=request.user)
+        order_products = OrderProduct.objects.filter(user=request.user)
+        total = 0
+        for se in order_products:
+             print(se.product.name)
+             total += se.quantity * se.product.price
+        return render(request, "cart.html", {'cart': order, 'product': order_products, 'total': total})
+
 
 
 class ItemDetailView(DetailView):
@@ -88,10 +110,49 @@ def add_to_cart(request, slug):
             print(se.product.name)
             total += se.quantity*se.product.price
 
-        return render(request, "cart.html", {'cart':order, 'product':order_products, 'total':total})
+        return render(request, "cartadd.html", {'cart':order, 'product':order_products, 'total':total})
 
     else:
         print(request.get_full_path())
         url=request.get_full_path()
         return redirect('/account/login?url='+url)
 
+
+def updateQuantity(request, slug):
+    print("To tutaj bylem!")
+    id=request.POST.get('productid')
+    quant = request.POST.get('quantity')
+    print(id)
+
+    order_product=OrderProduct.objects.filter(id=id)
+    order_product.update(quantity=quant)
+
+
+
+    print('Ilosc: '+ quant)
+    return  redirect('/cart')
+
+def cartupdateQuantity(request):
+    print("JEstem ty")
+    id = request.POST.get('productid')
+    print(id)
+    if request.method == 'POST':
+        id = request.POST.get('productid')
+        print(id)
+        quant = request.POST.get('quantity')
+        print(quant)
+        order_product = OrderProduct.objects.filter(id=id)
+        order_product.update(quantity=quant)
+        return redirect('cart')
+
+
+def buy(request):
+    print(request.user)
+    user = User.objects.get(username=request.user)
+    useradress=UserAddress.objects.get(user=request.user)
+    order_products = OrderProduct.objects.filter(user=request.user)
+
+
+
+
+    return render(request, 'buy.html', {'adres':useradress, 'user':user, 'products':order_products})

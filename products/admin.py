@@ -25,7 +25,7 @@ class OrderAdmin(admin.ModelAdmin):
         'user',
 
     ]
-    list_filter = ['ordered',
+    list_filter = ['ordered', 'user'
                    ]
     search_fields = [
 

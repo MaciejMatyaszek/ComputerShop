@@ -86,5 +86,28 @@ class Order(models.Model):
     def get_products_name(self):
         pass
 
+class OrderHistory(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    products = models.ManyToManyField(OrderProduct)
+    start_date = models.DateTimeField(auto_now_add=True)
+    ordered_date = models.DateTimeField()
+    ordered = models.BooleanField(default=True)
 
+    def __str__(self):
+        return self.user.username
+
+    def get_products_name(self):
+        pass
+
+
+class OrderProductHistory(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
+
+    ordered = models.BooleanField(default=False)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    objects = models.Manager()
+    def __str__(self):
+        return f"{self.quantity} of {self.product.name}"
 

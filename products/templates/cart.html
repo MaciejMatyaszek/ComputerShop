@@ -81,8 +81,13 @@
 							</div>
 							<div class="top_bar_user">
 								<div class="user_icon"><img src="images/user.svg" alt=""></div>
-								<div><a href="#">Register</a></div>
-								<div><a href="#">Sign in</a></div>
+								{% if user.is_authenticated %}
+                                    <div>{{ user.username }}</div>
+                                    <div><a href="account/logout">Logout</a></div>
+                                {% else %}
+								<div><a href="account/register">Register</a></div>
+								<div><a href="account/login">Sign in</a></div>
+                                {% endif %}
 							</div>
 						</div>
 					</div>
@@ -394,7 +399,7 @@
 
 										<div class="cart_item_quantity cart_info_col">
 											<div class="cart_item_title">Quantity</div>
-                                            <div class="cart_item_text" ><form method="post" id="jsform{{ e.id }}"  action="updateQuantity"> {% csrf_token %}<input type="hidden"  name="productid"   value="{{ e.id }}"><input  type="number" min="1" max="5" style="width: 3em;"  onchange="teraz('jsform{{ e.id }}')" name="quantity" value="{{ e.quantity }}"></form></div>
+                                            <div class="cart_item_text" ><form method="post" id="jsform{{ e.id }}"  action="cartupdateQuantity"> {% csrf_token %}<input type="hidden"  name="productid"   value="{{ e.id }}"><input  type="number" min="1" max="5" style="width: 3em;"  onchange="teraz('jsform{{ e.id }}')" name="quantity" value="{{ e.quantity }}"></form></div>
 										</div>
 										<div class="cart_item_price cart_info_col">
 											<div class="cart_item_title">Price</div>

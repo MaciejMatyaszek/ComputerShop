@@ -77,8 +77,13 @@
 							</div>
 							<div class="top_bar_user">
 								<div class="user_icon"><img src="images/user.svg" alt=""></div>
-								<div><a href="#">Register</a></div>
-								<div><a href="#">Sign in</a></div>
+								{% if user.is_authenticated %}
+                                    <div>{{ user.username }}</div>
+                                    <div><a href="account/logout">Logout</a></div>
+                                {% else %}
+								<div><a href="account/register">Register</a></div>
+								<div><a href="account/login">Sign in</a></div>
+                                {% endif %}
 							</div>
 						</div>
 					</div>

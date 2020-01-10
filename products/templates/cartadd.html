@@ -1,26 +1,43 @@
-{% load static %}
+{%  load static %}
+{% load customer_tags %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
-<title>Registration</title>
+<title>Cart</title>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="OneTech shop project">
 <meta name="viewport" content="width=device-width, initial-scale=1">
- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
 
+    <script type="text/javascript">
+        function teraz(ala){
+
+     console.log(ala)
+     document.getElementById(ala).submit()
+        }
+</script>
+
+
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <!-- Popper JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 
 <!-- Latest compiled JavaScript -->
-
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<link href="plugins/fontawesome-free-5.0.1/css/fontawesome-all.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" type="text/css" href="{%  static 'css/cart_styles.css' %}">
+
+<link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+<link href="{% static 'plugins/fontawesome-free-5.0.1/css/fontawesome-all.css' %}" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="{% static 'css/cart_styles.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/contact_responsive.css' %}">
 
 </head>
@@ -39,7 +56,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col d-flex flex-row">
-						<div class="top_bar_contact_item"><div class="top_bar_icon"><img src="{% static 'images/phone.png' %}" alt=""></div>+38 068 005 3570</div>
+						<div class="top_bar_contact_item"><div class="top_bar_icon"><img src="images/phone.png" alt=""></div>+38 068 005 3570</div>
 						<div class="top_bar_contact_item"><div class="top_bar_icon"><img src="images/mail.png" alt=""></div><a href="mailto:fastsales@gmail.com">fastsales@gmail.com</a></div>
 						<div class="top_bar_content ml-auto">
 							<div class="top_bar_menu">
@@ -112,9 +129,10 @@
 												</ul>
 											</div>
 										</div>
-										<button type="submit" class="header_search_button trans_300" value="Submit"><img src="images/search.png" alt=""></button>
+										<button  class="header_search_button trans_300" ><img src="images/search.png" alt=""></button>
 									</form>
 								</div>
+
 							</div>
 						</div>
 					</div>
@@ -354,56 +372,93 @@
 
 	</header>
 
-	<!-- Contact Info -->
-	<div>
+	<!-- Cart -->
 
-        <form action="register" method="post">
-<center>
-            {% csrf_token %}
-                  <br>
-            <br>
-            <input type="text" name="first_name" placeholder="First Name">
-            <br>
-            <br>
-            <input type="text" name="last_name" placeholder="Last Name">
-            <br>
-            <br>
-            <input type="password" name="password1" placeholder="Password">
-            <br>
-            <br>
-            <input type="password" name="password2" placeholder="Password">
-            <br>
-            <br>
-            <input type="text" name="username" placeholder="Username">
-            <br>
-            <br>
-            <input type="email" name="email" placeholder="Email">
-             <br>
-            <br>
-            <input type="text" name="address" placeholder="Address">
-            <br>
-            <br>
-            <input type="text" name="street" placeholder="Street">
-             <br>
-            <br>
-            <input type="text" name="zipcode" placeholder="Zipcode">
-            <br>
-            <br>
-            <input type="text" name="city" placeholder="City">
-             <br>
-            <br>
-            <input type="submit">
-            <br>
-            <br>
-            {% for message in messages %}
-            <h3 color="red" >{{ message }}</h3>
-            {%  endfor %}
-</center>
-        </form>
+	<div class="cart_section">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-10 offset-lg-1">
+					<div class="cart_container">
+						<div class="cart_title">Shopping Cart</div>
+						<div class="cart_items">
+							<ul class="cart_list">
+
+                                {% for e in product %}
+
+
+								<li class="cart_item clearfix">
+									<div class="cart_item_image"><img src="{{ e.product.icon.url }}" alt=""></div>
+									<div class="cart_item_info d-flex flex-md-row flex-column justify-content-between">
+										<div class="cart_item_name cart_info_col">
+											<div class="cart_item_title">Name</div>
+											<div class="cart_item_text" style="min-width: 100px;">{{ e.product }}</div>
+										</div>
 
 
 
+
+										<div class="cart_item_quantity cart_info_col">
+											<div class="cart_item_title">Quantity</div>
+                                            <div class="cart_item_text" ><form method="post" id="jsform{{ e.id }}"  action="updateQuantity"> {% csrf_token %}<input type="hidden"  name="productid"   value="{{ e.id }}"><input  type="number" min="1" max="5" style="width: 3em;"  onchange="teraz('jsform{{ e.id }}')" name="quantity" value="{{ e.quantity }}"></form></div>
+										</div>
+										<div class="cart_item_price cart_info_col">
+											<div class="cart_item_title">Price</div>
+											<div class="cart_item_text" style="min-width: 60px;">{{ e.product.price }}</div>
+										</div>
+										<div class="cart_item_total cart_info_col">
+											<div class="cart_item_title">Total</div>
+											<div class="cart_item_text" style="min-width: 60px;">{{ e.product.price |multiply:e.quantity }}</div>
+										</div>
+									</div>
+								</li>
+                            {% endfor %}
+							</ul>
+
+						</div>
+
+						<!-- Order Total -->
+						<div class="order_total">
+							<div class="order_total_content text-md-right">
+								<div class="order_total_title">Order Total:</div>
+								<div class="order_total_amount">  {{ total }}</div>
+							</div>
+						</div>
+
+						<div class="cart_buttons">
+							<button type="button" class="button cart_button_clear">Add to Cart</button>
+							<button type="button" class="button cart_button_checkout">Add to Cart</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
+
+	<!-- Newsletter -->
+
+	<div class="newsletter">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<div class="newsletter_container d-flex flex-lg-row flex-column align-items-lg-center align-items-center justify-content-lg-start justify-content-center">
+						<div class="newsletter_title_container">
+							<div class="newsletter_icon"><img src="images/send.png" alt=""></div>
+							<div class="newsletter_title">Sign up for Newsletter</div>
+							<div class="newsletter_text"><p>...and receive %20 coupon for first shopping.</p></div>
+						</div>
+						<div class="newsletter_content clearfix">
+							<form action="#" class="newsletter_form">
+								<input type="email" class="newsletter_input" required="required" placeholder="Enter your email address">
+								<button class="newsletter_button">Subscribe</button>
+							</form>
+							<div class="newsletter_unsubscribe_link"><a href="#">unsubscribe</a></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- Footer -->
 
 	<footer class="footer">
@@ -517,8 +572,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 <script src="{% static 'plugins/greensock/animation.gsap.min.js' %}"></script>
 <script src="{% static 'plugins/greensock/ScrollToPlugin.min.js' %}"></script>
 <script src="{% static 'plugins/easing/easing.js' %}"></script>
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyCIwF204lFZg1y4kPSIhKaHEXMLYxxuMhA"></script>
-<script src="{% static 'js/contact_custom.js' %}"></script>
+<script src="{% static 'js/cart_custom.js' %}"></script>
 </body>
 
 </html>
