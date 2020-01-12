@@ -62,7 +62,7 @@ def register(request):
                 return redirect('register')
             else:
                 user = User.objects.create_user(username=username, password=password1, email=email, first_name=first_name, last_name=last_name)
-                userAdress= UserAddress.objects.create(user=user, address=address, street=street, city=city, zipcode=zipcode)
+                userAdress= UserAddress.objects.create(user=user, address=address, street=street, city=city, zipcode=zipcode, phone=phone)
                 user.save()
                 userAdress.save()
                 return redirect('login')

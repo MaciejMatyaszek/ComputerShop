@@ -6,7 +6,7 @@ from django.contrib import admin
 from .models import *
 
 class ProductsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'icon', 'number', 'price', 'get_products', 'icon1', 'icon2' )
+    list_display = ('name', 'icon', 'number', 'price', 'get_products', 'icon1', 'icon2', 'promotion', 'new', )
     prepopulated_fields = {'slug': ('name', 'category')}
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ('name', 'surname')

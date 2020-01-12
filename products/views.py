@@ -1,11 +1,15 @@
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView, ListView
 from django.utils import timezone
-from .models import Product, OrderProduct, Order, OrderAdress
+
+
+from .models import Product, OrderProduct, Order, OrderAdress, Category
 from account.models import  UserAddress, User
 from django import  template
+from django.db.models import Q
 import pickle
 # Create your views here.
 
@@ -13,6 +17,9 @@ import pickle
 def index(request):
     all_entry = Product.products.all()
     cat = request.GET.get('category')
+    if request.GET.get('q') is not None:
+        q=request.GET.get('q')
+        return HttpResponseRedirect('/shop?q='+q)
     print(cat)
     cat_list = []
     if cat != None:
@@ -44,14 +51,23 @@ class HomeView(ListView):
     paginate_by = 10
     template_name = "index.html"
 
+
 def OrderView(request):
     if request.method == 'POST':
         id = request.POST.get('productid')
         print(id)
-        quant = request.POST.get('quantity')
+        quant =int (request.POST.get('quantity'))
         print(quant)
         order_product = OrderProduct.objects.filter(id=id)
-        order_product.update(quantity=quant)
+        t=OrderProduct.objects.get(id=id)
+        name=t.product.name
+        product= Product.products.get(name=name)
+        print(product.number)
+        max = int(product.number)
+        if quant>max:
+            order_product.update(quantity=max)
+        else:
+            order_product.update(quantity=quant)
         return redirect('/cart')
 
     else:
@@ -87,8 +103,13 @@ def add_to_cart(request, slug):
             order = order_qs[0]
 
             if order.products.filter(product__slug=product.slug).exists():
-                order_product.quantity += 1
-                order_product.save()
+                quant= int(product.number)
+
+                if int(order_product.quantity)+1 <= quant:
+                    order_product.quantity += 1
+                    order_product.save()
+
+
 
             else:
 
@@ -181,6 +202,12 @@ def purchase(request):
 
         orderaddress = OrderAdress.objects.create(order=Order.objects.get(user=request.user, ordered=False), firstname=firstname, lastname=lastname, city=city, street=street, address=address, zipcode=zipcode, phone=phone, )
         order = Order.objects.filter(user=request.user, ordered=False).update(ordered=True)
+        order_products = OrderProduct.objects.filter(user=request.user, ordered=False)
+        for prod in order_products:
+            produkt =prod.product.name
+            numbero = prod.product.number
+            ilosc = prod.quantity
+            Product.products.filter(name=produkt).update(number=numbero-ilosc)
         order_products = OrderProduct.objects.filter(user=request.user, ordered=False).update(ordered=True)
         OrderAdress.objects.create()
 
@@ -188,3 +215,84 @@ def purchase(request):
         return redirect('/')
     else:
         return redirect('/')
+
+
+
+def categoryLaptops(request, slug):
+    
+    category = Category.objects.all()
+    clist=[]
+    for  c in category:
+        clist.append(c.name)
+    print(category)
+    categorycount=clist.count(slug)
+    print(clist.count(slug))
+    if categorycount >0:
+
+        category = Category.objects.get(name=slug)
+        products = Product.products.filter(category=category)
+        print(products)
+
+        return render(request, 'shop.html', {'category':products})
+
+    else:
+        products =Product.products.all()
+        return render(request, 'shop.html' )
+
+def search(request):
+
+    print("Bylem w search")
+    query=request.GET.get('q')
+    print(query)
+    if query is not None:
+        results = Product.products.filter(Q(name__icontains=query))
+
+
+        return render(request, "shop.html", {'category':results})
+    else:
+        products=Product.products.all()
+        return render(request, "shop.html", {'category':products})
+
+def shop(request):
+    products = Product.products.all()
+    return render(request, 'shop.html', {'category': products})
+
+
+def delete(request):
+    if request.method=='POST':
+        productid = request.POST.get('product')
+        print(productid)
+        OrderProduct.objects.filter(id=productid).delete()
+
+        order = Order.objects.filter(user=request.user, ordered=False)
+        order_products = OrderProduct.objects.filter(user=request.user, ordered=False)
+        total = 0
+        for se in order_products:
+            print(se.product.name)
+            total += se.quantity * se.product.price
+
+        return redirect('/cart')
+
+def deleteAdd(request, slug):
+    if request.method=='POST':
+        productid = request.POST.get('product')
+        print(productid)
+        OrderProduct.objects.filter(id=productid).delete()
+
+        order = Order.objects.filter(user=request.user, ordered=False)
+        order_products = OrderProduct.objects.filter(user=request.user, ordered=False)
+        total = 0
+        for se in order_products:
+            print(se.product.name)
+            total += se.quantity * se.product.price
+
+        return redirect('/cart')
+
+def userProfile(request):
+    user=request.user
+    userobject= User.objects.get(username=user)
+
+    adress=UserAddress.objects.get(user=userobject.id)
+    print(user)
+    print(userobject.username)
+    return render(request, 'user.html', {'user':userobject, 'adres':adress})

@@ -1,50 +1,36 @@
-{%  load static %}
-{% load customer_tags %}
-
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Cart</title>
+
+<title>Registration</title>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="OneTech shop project">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+   <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
 
-    <script type="text/javascript">
-        function teraz(ala){
-
-     console.log(ala)
-     document.getElementById(ala).submit()
-        }
-</script>
-
-
-
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-
-<!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <!-- Popper JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 
 <!-- Latest compiled JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
-<link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
-<link href="{% static 'plugins/fontawesome-free-5.0.1/css/fontawesome-all.css' %}" rel="stylesheet" type="text/css">
-<link rel="stylesheet" type="text/css" href="{% static 'css/cart_styles.css' %}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<link href="plugins/fontawesome-free-5.0.1/css/fontawesome-all.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="{%  static 'css/cart_styles.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/contact_responsive.css' %}">
 
 </head>
 
 <body>
 
-<div class="super_container">
 
 	<!-- Header -->
 <div class="top_bar">
@@ -70,7 +56,7 @@
 								<div class="user_icon"><img src="{% static 'images/user.svg' %}" alt=""></div>
                                 {% if user.is_authenticated %}
                                     <div>{{ user.username }}</div>
-                                    <div><a href="/account/logout">Logout</a></div>
+                                    <div><a href="account/logout">Logout</a></div>
                                 {% else %}
 								<div><a href="/account/register">Register</a></div>
 								<div><a href="/account/login">Sign in</a></div>
@@ -126,7 +112,6 @@
 							</div>
 						</div>
 					</div>
-
 					<!-- Wishlist -->
 					<div class="col-lg-4 col-9 order-lg-3 order-2 text-lg-left text-right">
 						<div class="wishlist_cart d-flex flex-row align-items-center justify-content-end">
@@ -311,99 +296,53 @@
 
 	</header>
 
-	<!-- Cart -->
+	<!-- Contact Info -->
+    <div class="container" style="text-align: center;">
+	<div class="well" style="margin-top: 50px;width: 500px; margin-left: 300px;">
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#home" data-toggle="tab">Profile</a></li>
+      <li><a href="#profile" data-toggle="tab">Password</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+      <div class="tab-pane active in" id="home">
+        <form id="tab">
 
-	<div class="cart_section">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-10 offset-lg-1">
-					<div class="cart_container">
-						<div class="cart_title">Shopping Cart</div>
-						<div class="cart_items">
-							<ul class="cart_list">
+            <label>First Name</label>
+            <input type="text" value="{{ user.first_name }}" class="input-xlarge">
+            <label>Last Name</label>
+            <input type="text" value="{{ user.last_name }}" class="input-xlarge">
+            <label>Email</label>
+            <input type="text" value="{{ user.email }}" class="input-xlarge">
+            <label>City</label>
+            <input type="text" value="{{adres.city}}" class="input-xlarge">
+            <label>Street</label>
+            <input type="text" value="{{ adres.street }}" class="input-xlarge">
+             <label>Zipcode</label>
+            <input type="text" value="{{ adres.zipcode }}" class="input-xlarge">
+             <label>Phone number</label>
+            <input type="number" value="{{ adres.phone }}" class="input-xlarge">
+             <label>Password</label>
+            <input type="password"  class="input-xlarge">
 
-                                {% for e in product %}
+          	<div>
+        	    <button class="btn btn-primary">Update</button>
+        	</div>
+        </form>
+      </div>
+      <div class="tab-pane fade" id="profile">
+    	<form id="tab2">
+        	<label>New Password</label>
+        	<input type="password" class="input-xlarge">
+        	<div>
+        	    <button class="btn btn-primary">Update</button>
+        	</div>
+    	</form>
+      </div>
+  </div>
 
-
-								<li class="cart_item clearfix">
-									<div class="cart_item_image"><img src="{{ e.product.icon.url }}" alt=""></div>
-									<div class="cart_item_info d-flex flex-md-row flex-column justify-content-between">
-										<div class="cart_item_name cart_info_col">
-											<div class="cart_item_title">Name</div>
-											<div class="cart_item_text" style="min-width: 100px;">{{ e.product }}</div>
-										</div>
-
-    
-    
-
-										<div class="cart_item_quantity cart_info_col">
-											<div class="cart_item_title">Quantity</div>
-                                            <div class="cart_item_text" ><form method="post" id="jsform{{ e.id }}"  action="cartupdateQuantity"> {% csrf_token %}<input type="hidden"  name="productid"   value="{{ e.id }}"><input  type="number" min="1" max="5" style="width: 3em;"  onchange="teraz('jsform{{ e.id }}')" name="quantity" value="{{ e.quantity }}"></form></div>
-										</div>
-										<div class="cart_item_price cart_info_col">
-											<div class="cart_item_title">Price</div>
-											<div class="cart_item_text" style="min-width: 60px;">{{ e.product.price }}</div>
-										</div>
-										<div class="cart_item_total cart_info_col">
-											<div class="cart_item_title">Total</div>
-											<div class="cart_item_text" style="min-width: 60px;">{{ e.product.price |multiply:e.quantity }}</div>
-										</div>
-                                        <div class="cart_item_total cart_info_col">
-											<div class="cart_item_title"></div>
-											<div class="cart_item_text" style="min-width: 60px;"> <form method="post" action="delete"> {% csrf_token %}  <input name="product" type="hidden" value="{{e.id}}"> <input type="submit" class="btn" value="Delete"> </form> </div>
-										</div>
-									</div>
-								</li>
-                            {% endfor %}
-							</ul>
-
-						</div>
-
-						<!-- Order Total -->
-						<div class="order_total">
-							<div class="order_total_content text-md-right">
-								<div class="order_total_title">Order Total:</div>
-								<div class="order_total_amount">  {{ total }}</div>
-							</div>
-						</div>
-
-						<div class="cart_buttons">
-							<a href="/" class="button cart_button_clear">Back to shop</a>
-							<a href="/buy" class="button cart_button_checkout">Go to checkout</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- Newsletter -->
-
-	<div class="newsletter">
-		<div class="container">
-			<div class="row">
-				<div class="col">
-					<div class="newsletter_container d-flex flex-lg-row flex-column align-items-lg-center align-items-center justify-content-lg-start justify-content-center">
-						<div class="newsletter_title_container">
-							<div class="newsletter_icon"><img src="{% static 'images/send.png' %}" alt=""></div>
-							<div class="newsletter_title">Sign up for Newsletter</div>
-							<div class="newsletter_text"><p>...and receive %20 coupon for first shopping.</p></div>
-						</div>
-						<div class="newsletter_content clearfix">
-							<form action="#" class="newsletter_form">
-								<input type="email" class="newsletter_input" required="required" placeholder="Enter your email address">
-								<button class="newsletter_button">Subscribe</button>
-							</form>
-							<div class="newsletter_unsubscribe_link"><a href="#">unsubscribe</a></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    </div>
 
 	<!-- Footer -->
-
 	<footer class="footer">
 		<div class="container">
 			<div class="row">
@@ -515,7 +454,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> Macie
 <script src="{% static 'plugins/greensock/animation.gsap.min.js' %}"></script>
 <script src="{% static 'plugins/greensock/ScrollToPlugin.min.js' %}"></script>
 <script src="{% static 'plugins/easing/easing.js' %}"></script>
-<script src="{% static 'js/cart_custom.js' %}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyCIwF204lFZg1y4kPSIhKaHEXMLYxxuMhA"></script>
+<script src="{% static 'js/contact_custom.js' %}"></script>
 </body>
 
 </html>

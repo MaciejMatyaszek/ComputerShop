@@ -1,44 +1,32 @@
-{%  load static %}
-{% load customer_tags %}
-
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Cart</title>
+<title>Shop</title>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="OneTech shop project">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
-    <script type="text/javascript">
-        function teraz(ala){
-
-     console.log(ala)
-     document.getElementById(ala).submit()
-        }
-</script>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
 
-
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-
-<!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <!-- Popper JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 
 <!-- Latest compiled JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
-<link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
 <link href="{% static 'plugins/fontawesome-free-5.0.1/css/fontawesome-all.css' %}" rel="stylesheet" type="text/css">
-<link rel="stylesheet" type="text/css" href="{% static 'css/cart_styles.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/contact_responsive.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.theme.default.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/animate.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/jquery-ui-1.12.1.custom/jquery-ui.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/shop_styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/shop_responsive.css' %}">
 
 </head>
 
@@ -310,72 +298,129 @@
 		</div>
 
 	</header>
+	<!-- Home -->
 
-	<!-- Cart -->
+	<div class="home">
+		<div class="home_background parallax-window" data-parallax="scroll" data-image-src="images/shop_background.jpg"></div>
+		<div class="home_overlay"></div>
+		<div class="home_content d-flex flex-column align-items-center justify-content-center">
+			<h2 class="home_title">Smartphones & Tablets</h2>
+		</div>
+	</div>
 
-	<div class="cart_section">
+	<!-- Shop -->
+
+	<div class="shop">
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-10 offset-lg-1">
-					<div class="cart_container">
-						<div class="cart_title">Shopping Cart</div>
-						<div class="cart_items">
-							<ul class="cart_list">
+				<div class="col-lg-3">
 
-                                {% for e in product %}
-
-
-								<li class="cart_item clearfix">
-									<div class="cart_item_image"><img src="{{ e.product.icon.url }}" alt=""></div>
-									<div class="cart_item_info d-flex flex-md-row flex-column justify-content-between">
-										<div class="cart_item_name cart_info_col">
-											<div class="cart_item_title">Name</div>
-											<div class="cart_item_text" style="min-width: 100px;">{{ e.product }}</div>
-										</div>
-
-    
-    
-
-										<div class="cart_item_quantity cart_info_col">
-											<div class="cart_item_title">Quantity</div>
-                                            <div class="cart_item_text" ><form method="post" id="jsform{{ e.id }}"  action="cartupdateQuantity"> {% csrf_token %}<input type="hidden"  name="productid"   value="{{ e.id }}"><input  type="number" min="1" max="5" style="width: 3em;"  onchange="teraz('jsform{{ e.id }}')" name="quantity" value="{{ e.quantity }}"></form></div>
-										</div>
-										<div class="cart_item_price cart_info_col">
-											<div class="cart_item_title">Price</div>
-											<div class="cart_item_text" style="min-width: 60px;">{{ e.product.price }}</div>
-										</div>
-										<div class="cart_item_total cart_info_col">
-											<div class="cart_item_title">Total</div>
-											<div class="cart_item_text" style="min-width: 60px;">{{ e.product.price |multiply:e.quantity }}</div>
-										</div>
-                                        <div class="cart_item_total cart_info_col">
-											<div class="cart_item_title"></div>
-											<div class="cart_item_text" style="min-width: 60px;"> <form method="post" action="delete"> {% csrf_token %}  <input name="product" type="hidden" value="{{e.id}}"> <input type="submit" class="btn" value="Delete"> </form> </div>
-										</div>
-									</div>
-								</li>
-                            {% endfor %}
+					<!-- Shop Sidebar -->
+					<div class="shop_sidebar">
+						<div class="sidebar_section">
+							<div class="sidebar_title">Categories</div>
+							<ul class="sidebar_categories">
+								<li><a href="#">Computers & Laptops</a></li>
+								<li><a href="#">Cameras & Photos</a></li>
+								<li><a href="#">Hardware</a></li>
+								<li><a href="#">Smartphones & Tablets</a></li>
+								<li><a href="#">TV & Audio</a></li>
+								<li><a href="#">Gadgets</a></li>
+								<li><a href="#">Car Electronics</a></li>
+								<li><a href="#">Video Games & Consoles</a></li>
+								<li><a href="#">Accessories</a></li>
 							</ul>
-
 						</div>
-
-						<!-- Order Total -->
-						<div class="order_total">
-							<div class="order_total_content text-md-right">
-								<div class="order_total_title">Order Total:</div>
-								<div class="order_total_amount">  {{ total }}</div>
+						<div class="sidebar_section filter_by_section">
+							<div class="sidebar_title">Filter By</div>
+							<div class="sidebar_subtitle">Price</div>
+							<div class="filter_price">
+								<div id="slider-range" class="slider_range"></div>
+								<p>Range: </p>
+								<p><input type="text" id="amount" class="amount" readonly style="border:0; font-weight:bold;"></p>
 							</div>
 						</div>
 
-						<div class="cart_buttons">
-							<a href="/" class="button cart_button_clear">Back to shop</a>
-							<a href="/buy" class="button cart_button_checkout">Go to checkout</a>
-						</div>
+
 					</div>
+
+				</div>
+
+				<div class="col-lg-9">
+
+					<!-- Shop Content -->
+
+					<div class="shop_content">
+						<div class="shop_bar clearfix">
+							<div class="shop_product_count"></div>
+							<div class="shop_sorting">
+								<span>Sort by:</span>
+								<ul>
+									<li>
+										<span class="sorting_text">highest rated<i class="fas fa-chevron-down"></span></i>
+										<ul>
+											<li class="shop_sorting_button" data-isotope-option='{ "sortBy": "original-order" }'>highest rated</li>
+											<li class="shop_sorting_button" data-isotope-option='{ "sortBy": "name" }'>name</li>
+											<li class="shop_sorting_button"data-isotope-option='{ "sortBy": "price" }'>price</li>
+										</ul>
+									</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="product_grid">
+							<div class="product_grid_border"></div>
+
+							<!-- Product Item -->
+                            {% for p in category %}
+							<div class="product_item is_new">
+
+								<div class="product_border"></div>
+                                <div class="product_image d-flex flex-column align-items-center justify-content-center"><a href="product/{{ p.slug }}"><img src="{{ p.icon.url  }}" alt=""></a></div>
+								<div class="product_content">
+									<div class="product_price">{{ p.price }}</div>
+									<div class="product_name"><div><a href="product/{{ p.slug }}" tabindex="0">{{ p.name }}</a></div></div>
+								</div>
+    								<ul class="product_marks">
+                                              {% if p.promotion %}
+												<li class="product_mark product_discount">-25%</li>
+                                                {% endif %}
+                                                {% if p.new %}
+												<li class="product_mark product_new">new</li>
+                                                {% endif %}
+								</ul>
+
+							</div>
+                            {% endfor %}
+
+
+
+
+
+						</div>
+
+						<!-- Shop Page Navigation -->
+
+						<div class="shop_page_nav d-flex flex-row">
+							<div class="page_prev d-flex flex-column align-items-center justify-content-center"><i class="fas fa-chevron-left"></i></div>
+							<ul class="page_nav d-flex flex-row">
+								<li><a href="#">1</a></li>
+								<li><a href="#">2</a></li>
+								<li><a href="#">3</a></li>
+								<li><a href="#">...</a></li>
+								<li><a href="#">21</a></li>
+							</ul>
+							<div class="page_next d-flex flex-column align-items-center justify-content-center"><i class="fas fa-chevron-right"></i></div>
+						</div>
+
+					</div>
+
 				</div>
 			</div>
 		</div>
 	</div>
+
+	<!-- Recently Viewed -->
 
 	<!-- Newsletter -->
 
@@ -385,7 +430,7 @@
 				<div class="col">
 					<div class="newsletter_container d-flex flex-lg-row flex-column align-items-lg-center align-items-center justify-content-lg-start justify-content-center">
 						<div class="newsletter_title_container">
-							<div class="newsletter_icon"><img src="{% static 'images/send.png' %}" alt=""></div>
+							<div class="newsletter_icon"><img src="images/send.png" alt=""></div>
 							<div class="newsletter_title">Sign up for Newsletter</div>
 							<div class="newsletter_text"><p>...and receive %20 coupon for first shopping.</p></div>
 						</div>
@@ -403,6 +448,7 @@
 	</div>
 
 	<!-- Footer -->
+
 
 	<footer class="footer">
 		<div class="container">
@@ -514,8 +560,12 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> Macie
 <script src="{% static 'plugins/scrollmagic/ScrollMagic.min.js' %}"></script>
 <script src="{% static 'plugins/greensock/animation.gsap.min.js' %}"></script>
 <script src="{% static 'plugins/greensock/ScrollToPlugin.min.js' %}"></script>
+<script src="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.js' %}"></script>
 <script src="{% static 'plugins/easing/easing.js' %}"></script>
-<script src="{% static 'js/cart_custom.js' %}"></script>
+<script src="{% static 'plugins/Isotope/isotope.pkgd.min.js' %}"></script>
+<script src="{% static 'plugins/jquery-ui-1.12.1.custom/jquery-ui.js' %}"></script>
+<script src="{% static 'plugins/parallax-js-master/parallax.min.js' %}"></script>
+<script src="{% static 'js/shop_custom.js' %}"></script>
 </body>
 
 </html>

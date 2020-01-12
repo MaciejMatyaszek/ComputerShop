@@ -10,6 +10,7 @@ from django.urls import reverse
 class Category(models.Model):
     name = models.CharField('Nazwa Kategorii', max_length=100)
     slug = models.SlugField('Odnośnik', unique=True, max_length=100)
+    objects = models.Manager()
 
     class Meta:
         verbose_name = "Kategoria"
@@ -27,7 +28,10 @@ class Product(models.Model):
     number = models.IntegerField('Liczba Sztuk')
     price = models.IntegerField('Cena')
     category = models.ManyToManyField(Category, verbose_name='Kategorie')
+    promotion = models.BooleanField(default=False)
+    new = models.BooleanField(default=False)
     products = models.Manager()
+
 
 
     class Meta:
