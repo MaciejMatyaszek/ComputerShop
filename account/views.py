@@ -1,4 +1,6 @@
 from django.contrib import messages
+from django.contrib.auth import checks
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
@@ -77,3 +79,59 @@ def register(request):
 def logout(request):
     auth.logout(request)
     return redirect('/')
+
+@login_required(login_url='account/login')
+def updateUser(request):
+
+    if request.method=='POST':
+
+        password = request.POST['password']
+        print(password)
+        print(request.user)
+
+        upass = User.objects.get(username=request.user)
+
+        adress=UserAddress.objects.filter(user=request.user)
+        if(upass.check_password(password)):
+            upassword = User.objects.filter(username=request.user)
+
+            firstname = request.POST['firstname']
+            lastname = request.POST['lastname']
+            email = request.POST['email']
+            city = request.POST['city']
+            street = request.POST['street']
+            adress = request.POST['adress']
+            zipcode= request.POST['zipcode']
+            phonenumber = request.POST['phone']
+            adress = UserAddress.objects.filter(user=upass).update(city=city, street=street, zipcode=zipcode, phone=phonenumber, address=adress)
+            upassword.update(first_name=firstname, last_name=lastname, email=email)
+
+
+
+        return redirect('/userprofile')
+
+@login_required(login_url='account/login')
+def updatePassword(request):
+
+        if request.method == 'POST':
+
+            password = request.POST['password']
+            print(password)
+            print(request.user)
+
+            upass = User.objects.get(username=request.user)
+
+            adress = UserAddress.objects.filter(user=request.user)
+            if (upass.check_password(password)):
+                upassword = User.objects.get(username=request.user)
+
+                password1 = request.POST['password1']
+                password2 = request.POST['password2']
+                if password1 == password2:
+                    upassword.set_password(password1)
+                    print("Zmienilo?")
+                    upassword.save()
+
+            return redirect('/userprofile')
+
+

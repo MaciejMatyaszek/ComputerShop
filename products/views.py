@@ -48,12 +48,14 @@ def ProductList(ListView):
 
 class HomeView(ListView):
     model = Product
-    paginate_by = 10
+
     template_name = "index.html"
 
 
+@login_required(login_url='account/login')
 def OrderView(request):
     if request.method == 'POST':
+        print("Orderview Post")
         id = request.POST.get('productid')
         print(id)
         quant =int (request.POST.get('quantity'))
@@ -66,12 +68,14 @@ def OrderView(request):
         max = int(product.number)
         if quant>max:
             order_product.update(quantity=max)
+        elif quant<=0:
+            order_product.update(quantity=1)
         else:
             order_product.update(quantity=quant)
         return redirect('/cart')
 
     else:
-
+        print("ORder view get")
         order = Order.objects.filter(user=request.user, ordered=False)
         order_products = OrderProduct.objects.filter(user=request.user, ordered=False)
         total = 0
@@ -93,7 +97,7 @@ def add_to_cart(request, slug):
 
 
     if request.user.is_authenticated:
-
+        print("add to cart tu")
         product = get_object_or_404(Product, slug=slug)
         order_product, created = OrderProduct.objects.get_or_create(product=product,
                                                        user=request.user,
@@ -145,9 +149,16 @@ def updateQuantity(request, slug):
     id=request.POST.get('productid')
     quant = request.POST.get('quantity')
     print(id)
-
+    orderprodukt=OrderProduct.objects.get(id=id)
     order_product=OrderProduct.objects.filter(id=id)
-    order_product.update(quantity=quant)
+    max=int(orderprodukt.product.number)
+    lquant=int(quant)
+    if (lquant>max):
+        order_product.update(quantity=max)
+    elif lquant<=0:
+        order_product.update(quantity=1)
+    else:
+        order_product.update(quantity=quant)
 
 
 
@@ -155,7 +166,7 @@ def updateQuantity(request, slug):
     return  redirect('/cart')
 
 def cartupdateQuantity(request):
-    print("JEstem ty")
+
     id = request.POST.get('productid')
     print(id)
     if request.method == 'POST':
@@ -164,6 +175,7 @@ def cartupdateQuantity(request):
         quant = request.POST.get('quantity')
         print(quant)
         order_product = OrderProduct.objects.filter(id=id)
+
         order_product.update(quantity=quant)
 
         return redirect('cart')
@@ -184,7 +196,7 @@ def buy(request):
 
 def purchase(request):
     if request.method=='POST':
-        print("Siemanko")
+
         firstname=request.POST['firstname']
         lastname=request.POST['lastname']
         city = request.POST['city']
@@ -209,7 +221,7 @@ def purchase(request):
             ilosc = prod.quantity
             Product.products.filter(name=produkt).update(number=numbero-ilosc)
         order_products = OrderProduct.objects.filter(user=request.user, ordered=False).update(ordered=True)
-        OrderAdress.objects.create()
+
 
 
         return redirect('/')
@@ -223,13 +235,14 @@ def categoryLaptops(request, slug):
     category = Category.objects.all()
     clist=[]
     for  c in category:
-        clist.append(c.name)
+        clist.append(c.slug)
     print(category)
     categorycount=clist.count(slug)
     print(clist.count(slug))
+    print(slug)
     if categorycount >0:
-
-        category = Category.objects.get(name=slug)
+        print(slug)
+        category = Category.objects.get(slug=slug)
         products = Product.products.filter(category=category)
         print(products)
 
@@ -288,6 +301,7 @@ def deleteAdd(request, slug):
 
         return redirect('/cart')
 
+@login_required(login_url='account/login')
 def userProfile(request):
     user=request.user
     userobject= User.objects.get(username=user)
@@ -296,3 +310,19 @@ def userProfile(request):
     print(user)
     print(userobject.username)
     return render(request, 'user.html', {'user':userobject, 'adres':adress})
+
+
+@login_required(login_url='account/login')
+def userChange(request):
+    user=request.user
+    userobject= User.objects.get(username=user)
+
+    adress=UserAddress.objects.get(user=userobject.id)
+    print(user)
+    print(userobject.username)
+    return render(request, 'userpassword.html', {'user':userobject, 'adres':adress})
+
+
+def contact(request):
+
+    return render(request, 'contact.html')

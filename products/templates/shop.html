@@ -57,7 +57,12 @@
 							<div class="top_bar_user">
 								<div class="user_icon"><img src="{% static 'images/user.svg' %}" alt=""></div>
                                 {% if user.is_authenticated %}
-                                    <div>{{ user.username }}</div>
+                                    <div> {% if user.is_superuser %}
+
+                                        <a href="/admin">{{ user.username }}</a>
+                                        {% else %}
+                                            <a href="/userprofile">{{ user.username }}</a>
+                                        {% endif %}</div>
                                     <div><a href="/account/logout">Logout</a></div>
                                 {% else %}
 								<div><a href="/account/register">Register</a></div>
@@ -162,23 +167,28 @@
 								</div>
 
 								<ul class="cat_menu">
-									<li><a href="/c/Laptops">Laptops <i class="fas fa-chevron-right ml-auto"></i></a></li>
-									<li><a href="/c/Telefony">Phone<i class="fas fa-chevron-right"></i></a></li>
+								<li><a href="/c/laptops"> Laptops <i class="fas fa-chevron-right ml-auto"></i></a></li>
+									<li><a href="/c/smartphones">Smartphones<i class="fas fa-chevron-right"></i></a></li>
 									<li class="hassubs">
-										<a href="#">Hardware<i class="fas fa-chevron-right"></i></a>
+										<a href="#">Computer Accesories<i class="fas fa-chevron-right"></i></a>
 										<ul>
-											<li class="hassubs">
-												<li><a href="#">Menu Item<i class="fas fa-chevron-right"></i></a></li>
 
-											</li>
-											<li><a href="#">Menu Item<i class="fas fa-chevron-right"></i></a></li>
-											<li><a href="#">Menu Item<i class="fas fa-chevron-right"></i></a></li>
-											<li><a href="#">Menu Item<i class="fas fa-chevron-right"></i></a></li>
+											<li><a href="/c/keyboard">Keyboard<i class="fas fa-chevron-right"></i></a></li>
+													<li><a href="/c/mice">Mice<i class="fas fa-chevron-right"></i></a></li>
+													<li><a href="/c/webcams">Webcams<i class="fas fa-chevron-right"></i></a></li>
 										</ul>
 									</li>
-									<li><a href="#">Smartphones & Tablets<i class="fas fa-chevron-right"></i></a></li>
-									<li><a href="#">TV & Audio<i class="fas fa-chevron-right"></i></a></li>
+									<li><a href="/c/desktop-pcs">Desktop PCs<i class="fas fa-chevron-right"></i></a></li>
+									<li><a href="/c/headphone">Headphones<i class="fas fa-chevron-right"></i></a></li>
+                                    <li class="hassubs">
+										<a href="#">Component & Upgrades<i class="fas fa-chevron-right"></i></a>
+										<ul>
 
+											<li><a href="/c/computer-memory">Computer memory<i class="fas fa-chevron-right"></i></a></li>
+													<li><a href="/c/graphics-cards">Graphics cards<i class="fas fa-chevron-right"></i></a></li>
+													<li><a href="/c/processors">Processors<i class="fas fa-chevron-right"></i></a></li>
+										</ul>
+									</li>
 								</ul>
 							</div>
 
@@ -189,13 +199,13 @@
 									<li><a href="/"> Home &nbsp;<i class="fas fa-chevron-down"></i></a></li>
                                     <li><a href="/cart"> Cart   &nbsp;&nbsp;   <i class="fas fa-chevron-down"></i></a></li>
                                     <li><a href="/shop"> Shop  &nbsp;&nbsp;<i class="fas fa-chevron-down"></i></a></li>
-                                    <li><a href="#">User Page &nbsp;&nbsp;<i class="fas fa-chevron-down"></i></a></li>
+                                    <li><a href="/userprofile">User Page &nbsp;&nbsp;<i class="fas fa-chevron-down"></i></a></li>
 
 
 
 
-									<li><a href="contact.html">Contact &nbsp;&nbsp;<i class="fas fa-chevron-down"></i></a></li>
-                                    	<li><a href="contact.html">Maps&nbsp;<i class="fas fa-chevron-down"></i></a></li>
+									<li><a href="/contact>Contact &nbsp;&nbsp;<i class="fas fa-chevron-down"></i></a></li>
+                                    	<li><a href="/contact">Maps&nbsp;<i class="fas fa-chevron-down"></i></a></li>
 								</ul>
 							</div>
 
@@ -283,8 +293,8 @@
 										<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
 									</ul>
 								</li>
-								<li class="page_menu_item"><a href="blog.html">blog<i class="fa fa-angle-down"></i></a></li>
-								<li class="page_menu_item"><a href="contact.html">contact<i class="fa fa-angle-down"></i></a></li>
+
+								<li class="page_menu_item"><a href="/contact">contact<i class="fa fa-angle-down"></i></a></li>
 							</ul>
 
 							<div class="menu_contact">
@@ -304,7 +314,7 @@
 		<div class="home_background parallax-window" data-parallax="scroll" data-image-src="images/shop_background.jpg"></div>
 		<div class="home_overlay"></div>
 		<div class="home_content d-flex flex-column align-items-center justify-content-center">
-			<h2 class="home_title">Smartphones & Tablets</h2>
+			<h2 class="home_title"></h2>
 		</div>
 	</div>
 
@@ -320,15 +330,16 @@
 						<div class="sidebar_section">
 							<div class="sidebar_title">Categories</div>
 							<ul class="sidebar_categories">
-								<li><a href="#">Computers & Laptops</a></li>
-								<li><a href="#">Cameras & Photos</a></li>
-								<li><a href="#">Hardware</a></li>
-								<li><a href="#">Smartphones & Tablets</a></li>
-								<li><a href="#">TV & Audio</a></li>
-								<li><a href="#">Gadgets</a></li>
-								<li><a href="#">Car Electronics</a></li>
-								<li><a href="#">Video Games & Consoles</a></li>
-								<li><a href="#">Accessories</a></li>
+								<li><a href="/c/laptops">Laptops</a></li>
+								<li><a href="/c/smartphones">Smartphones</a></li>
+								<li><a href="/c/keyboard">Keyboard</a></li>
+								<li><a href="/c/mice"> Mice</a></li>
+								<li><a href="/c/webcams">Webcams</a></li>
+								<li><a href="/c/desktop-pcs">Desktop PCs</a></li>
+								<li><a href="/c/headphone">Headphones</a></li>
+								<li><a href="/c/computer-memory">Computer memory</a></li>
+								<li><a href="/c/graphics-cards">Graphics cards</a></li>
+                                <li><a href="/c/processors">Processors</a></li>
 							</ul>
 						</div>
 						<div class="sidebar_section filter_by_section">
@@ -378,7 +389,7 @@
 								<div class="product_border"></div>
                                 <div class="product_image d-flex flex-column align-items-center justify-content-center"><a href="product/{{ p.slug }}"><img src="{{ p.icon.url  }}" alt=""></a></div>
 								<div class="product_content">
-									<div class="product_price">{{ p.price }}</div>
+									<div class="product_price">{{ p.price }} $</div>
 									<div class="product_name"><div><a href="product/{{ p.slug }}" tabindex="0">{{ p.name }}</a></div></div>
 								</div>
     								<ul class="product_marks">
@@ -450,6 +461,7 @@
 	<!-- Footer -->
 
 
+
 	<footer class="footer">
 		<div class="container">
 			<div class="row">
@@ -457,7 +469,7 @@
 				<div class="col-lg-3 footer_col">
 					<div class="footer_column footer_contact">
 						<div class="logo_container">
-							<div class="logo"><a href="#">OneTech</a></div>
+							<div class="logo"><a href="/">OneTech</a></div>
 						</div>
 						<div class="footer_title">Got Question? Call Us 24/7</div>
 						<div class="footer_phone">+38 068 005 3570</div>
@@ -481,11 +493,10 @@
 					<div class="footer_column">
 						<div class="footer_title">Find it Fast</div>
 						<ul class="footer_list">
-							<li><a href="#">Computers & Laptops</a></li>
-							<li><a href="#">Cameras & Photos</a></li>
-							<li><a href="#">Hardware</a></li>
-							<li><a href="#">Smartphones & Tablets</a></li>
-							<li><a href="#">TV & Audio</a></li>
+							<li><a href="/c/laptops">Laptops</a></li>
+							<li><a href="/c/desktop-pcs">Desktop PCs</a></li>
+							<li><a href="/c/smartphones">Smartphones & Tablets</a></li>
+							<li><a href="/c/headphopnes">Headphones</a></li>
 						</ul>
 						<div class="footer_subtitle">Gadgets</div>
 						<ul class="footer_list">
@@ -497,11 +508,7 @@
 				<div class="col-lg-2">
 					<div class="footer_column">
 						<ul class="footer_list footer_list_2">
-							<li><a href="#">Video Games & Consoles</a></li>
-							<li><a href="#">Accessories</a></li>
-							<li><a href="#">Cameras & Photos</a></li>
-							<li><a href="#">Hardware</a></li>
-							<li><a href="#">Computers & Laptops</a></li>
+
 						</ul>
 					</div>
 				</div>
@@ -510,13 +517,9 @@
 					<div class="footer_column">
 						<div class="footer_title">Customer Care</div>
 						<ul class="footer_list">
-							<li><a href="#">My Account</a></li>
-							<li><a href="#">Order Tracking</a></li>
-							<li><a href="#">Wish List</a></li>
-							<li><a href="#">Customer Services</a></li>
-							<li><a href="#">Returns / Exchange</a></li>
-							<li><a href="#">FAQs</a></li>
-							<li><a href="#">Product Support</a></li>
+							<li><a href="/userprofile">My Account</a></li>
+							<li><a href="/contact">FAQs</a></li>
+
 						</ul>
 					</div>
 				</div>
@@ -551,7 +554,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> Macie
 		</div>
 	</div>
 </div>
-
 <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
 <script src="{% static 'styles/bootstrap4/popper.js' %}"></script>
 <script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>

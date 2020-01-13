@@ -13,6 +13,8 @@ from .views import (
     delete,
     deleteAdd,
     userProfile,
+    userChange,
+    contact,
 
 )
 
@@ -34,6 +36,8 @@ urlpatterns = [
     path('delete', delete, name='delete' ),
     path('add-to-cart/<slug>/delete', deleteAdd, name='del'),
     path('userprofile', userProfile, name='userprofile'),
+    path('userchange', userChange, name='userchange'),
+    path('contact', contact, name='contact' ),
 
 
 ]
